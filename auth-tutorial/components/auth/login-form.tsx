@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import { LoginSchema } from "@/schemas";
+import { LoginSchema } from "@/project/schemas";
 
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error"
 import { FormSuccess } from "@/components/form-success"
 
-import { login } from "@/actions/login"
+import { login } from "@/project/actions/login"
 
 export const LoginForm = () => {
   const [isPending, startTransition] = useTransition();

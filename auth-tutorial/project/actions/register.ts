@@ -2,8 +2,8 @@
 
 import bcrypt from "bcryptjs";
 import * as z from "zod";
-import { RegisterSchema } from "@/schemas";
-import { getUserByEmail, createUser } from "@/data/prisma/user";
+import { RegisterSchema } from "@/project/schemas";
+import { getUserByEmail, createUser } from "@/project/data/prisma/user";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);

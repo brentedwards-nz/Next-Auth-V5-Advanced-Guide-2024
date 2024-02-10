@@ -1,7 +1,7 @@
 import { Poppins } from "next/font/google";
 import { GiPadlock } from "react-icons/gi";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/project/lib/utils"
 
 const font = Poppins({
   subsets: ["latin"],

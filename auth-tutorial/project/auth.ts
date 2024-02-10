@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
-import { prismaDb } from "@/lib/prismaDb";
-import authConfig from "./auth.config";
+import { prismaDb } from "@/project/lib/prismaDb";
+import authConfig from "@/project/auth.config";
 
 export const {
   handlers: { GET, POST },

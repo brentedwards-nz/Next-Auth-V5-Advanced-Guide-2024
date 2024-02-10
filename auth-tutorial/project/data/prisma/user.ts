@@ -1,4 +1,4 @@
-import { prismaDb } from "@/lib/prismaDb";
+import { prismaDb } from "@/project/lib/prismaDb";
 
 export const getUserByEmail = async (email: string) => {
   try {
