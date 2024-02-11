@@ -1,7 +1,7 @@
-import Github from "next-auth/providers/github";
-
 import type { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
+import Github from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 
 import { LoginSchema } from "@/project/schemas";
 import { getUserByEmail } from "@/project/data/prisma/user";
@@ -10,7 +10,8 @@ import bcrypt from "bcryptjs";
 
 export default {
   providers: [
-    Credentials({
+    CredentialsProvider({
+      name: "Credentials",
       async authorize(credentials) {
         const validatedFields = LoginSchema.safeParse(credentials);
 
@@ -18,7 +19,7 @@ export default {
           return null;
         }
 
-        console.log(validatedFields.data);
+        //console.log(validatedFields.data);
 
         const { email, password } = validatedFields.data;
         const user = await getUserByEmail(email);
@@ -30,7 +31,7 @@ export default {
         if (!passwordsMatch) {
           return null;
         }
-        console.log(user);
+        //console.log(user);
         return user;
       },
     }),
@@ -38,5 +39,10 @@ export default {
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
+    Google({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
 } satisfies NextAuthConfig;

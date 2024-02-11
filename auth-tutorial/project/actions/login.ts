@@ -3,6 +3,7 @@
 import * as z from "zod";
 
 import { AuthError } from "next-auth";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 import { signIn } from "@/project/auth";
 import { LoginSchema } from "@/project/schemas";
@@ -24,6 +25,11 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       //redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
+    if (isRedirectError(error)) {
+      console.log("Was redirect occurred");
+      throw error;
+    }
+
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
@@ -53,5 +59,5 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   //   }
   // }
 
-  return { success: "Success" };
+  // return { success: "Success" };
 };
