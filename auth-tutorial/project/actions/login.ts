@@ -3,6 +3,7 @@
 import * as z from "zod";
 
 import { AuthError } from "next-auth";
+
 import { isRedirectError } from "next/dist/client/components/redirect";
 
 import { signIn } from "@/project/auth";
@@ -34,30 +35,15 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       switch (error.type) {
         case "CredentialsSignin":
           return { error: "Invalid Credentials" };
+        case "OAuthAccountNotLinked":
+          return { error: "Account Not Linked" };
         default:
           return { error: "Something went wrong" };
       }
     }
+
     throw error;
   }
 
-  // if (!validatedFields.success) {
-  //   return { error: "Invalid data" };
-  // }
-
-  // const { email, password } = validatedFields.data;
-  // const user = await getUserByEmail(email);
-
-  // if (!user) {
-  //   return { error: "Failed to login" };
-  // }
-
-  // if (user.password) {
-  //   const passwordsMatch = await bcrypt.compare(password, user.password);
-  //   if (!passwordsMatch) {
-  //     return { error: "Invalid credentials" };
-  //   }
-  // }
-
-  // return { success: "Success" };
+  //return { success: "" };
 };

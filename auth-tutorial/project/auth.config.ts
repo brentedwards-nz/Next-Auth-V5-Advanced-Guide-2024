@@ -36,8 +36,8 @@ export default {
       },
     }),
     Github({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+      clientId: process.env.GITHUB_ID_LOCAL,
+      clientSecret: process.env.GITHUB_SECRET_LOCAL,
     }),
     Google({
       clientId: process.env.GOOGLE_ID,

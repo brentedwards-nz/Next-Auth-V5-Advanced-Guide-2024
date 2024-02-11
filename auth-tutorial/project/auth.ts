@@ -12,6 +12,23 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+  },
+  events: {
+    async linkAccount({ user }) {
+      try {
+        await prismaDb.user.update({
+          where: { id: user.id },
+          data: { emailVerified: new Date() },
+        });
+      } catch (err) {
+        console.log("Link Account Error: ", err);
+        throw err;
+      }
+    },
+  },
   callbacks: {
     async session({ token, session }) {
       if (token.sub && session.user) {
