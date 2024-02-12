@@ -2,6 +2,7 @@
 
 import * as z from "zod";
 
+import { sendConfirmationEmail } from "@/project/lib/email";
 import { AuthError } from "next-auth";
 
 import { isRedirectError } from "next/dist/client/components/redirect";
@@ -9,6 +10,9 @@ import { isRedirectError } from "next/dist/client/components/redirect";
 import { signIn } from "@/project/auth";
 import { LoginSchema } from "@/project/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "@/project/routes";
+
+import { generateVerificationToken } from "@/project/lib/tokens";
+import { getUserByEmail } from "@/project/data/prisma/user";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -18,6 +22,22 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   const { email, password } = validatedFields.data;
+
+  const existingUser = await getUserByEmail(email);
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: "Email does not exist" };
+  }
+
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      existingUser.email
+    );
+
+    const result = await sendConfirmationEmail(email, verificationToken.token);
+    if (result) return { success: "Confirmation email sent" };
+    return { error: "Could not send confirmation email" };
+  }
+
   try {
     await signIn("credentials", {
       email,
@@ -45,5 +65,5 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     throw error;
   }
 
-  //return { success: "" };
+  return { success: "" };
 };

@@ -2,8 +2,11 @@
 
 import bcrypt from "bcryptjs";
 import * as z from "zod";
+import { sendConfirmationEmail } from "@/project/lib/email";
 import { RegisterSchema } from "@/project/schemas";
 import { getUserByEmail, createUser } from "@/project/data/prisma/user";
+
+import { generateVerificationToken } from "@/project/lib/tokens";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -34,5 +37,10 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Could not create new user" };
   }
 
-  return { success: "User created" };
+  const verificationToken = await generateVerificationToken(email);
+  console.log(verificationToken);
+
+  const result = await sendConfirmationEmail(email, verificationToken.token);
+  if (result) return { success: "Confirmation email sent" };
+  return { error: "Could not send confirmation email" };
 };
