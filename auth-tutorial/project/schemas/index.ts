@@ -26,3 +26,16 @@ export const RegisterSchema = z.object({
     .string()
     .min(6, { message: "Confirm Password not long enough" }),
 });
+
+export const ResetSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+});
+
+export const ResetPasswordSchema = z.object({
+  password: z.string().min(6, { message: "Password not long enough" }),
+  confirmPassword: z
+    .string()
+    .min(6, { message: "Confirm Password not long enough" }),
+});

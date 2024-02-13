@@ -47,9 +47,19 @@ export const sendConfirmationEmail = async (email: string, token: string) => {
   const confirmLink = `${process.env.NEXTAUTH_URL}/auth/verification?token=${token}`;
   return sendEmail(
     email,
-    "Next Auth",
+    "Next Auth - Confirm Email",
     "",
     `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
+  );
+};
+
+export const sendPasswordResetEmail = async (email: string, token: string) => {
+  const confirmLink = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${token}`;
+  return sendEmail(
+    email,
+    "Next Auth - Reset Password",
+    "",
+    `<p>Click <a href="${confirmLink}">here</a> to reset password.</p>`
   );
 };
 
